@@ -5,6 +5,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ua.lviv.iot.parking.model.ParkingSpot;
+import ua.lviv.iot.parking.writer.ParkingSpotWriter;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -32,18 +33,14 @@ public class ParkingSpotController {
     public ParkingSpot createParkingSpot(final @RequestBody ParkingSpot parkingSpot) {
         parkingSpot.setId(idCounter.incrementAndGet());
         parkingSpots.put(parkingSpot.getId(), parkingSpot);
+        ParkingSpotWriter.writeDataToCsv(new LinkedList<ParkingSpot>(parkingSpots.values()), "parking_data.csv");
         return parkingSpot;
-//        String csvData = parkingSpot.getSpotNumber() + ", " + parkingSpot.getCarNumber() + ", " + parkingSpot.getId();
-//
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentType(MediaType.TEXT_PLAIN);
-//
-//        return csvData;
     }
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<ParkingSpot> deleteParkingSpot(@PathVariable("id") Integer parkingSpotId) {
         HttpStatus status = parkingSpots.remove(parkingSpotId) == null ? HttpStatus.NOT_FOUND : HttpStatus.OK;
+        ParkingSpotWriter.writeDataToCsv(new LinkedList<ParkingSpot>(parkingSpots.values()), "parking_data.csv");
         return ResponseEntity.status(status).build();
     }
 
@@ -54,6 +51,7 @@ public class ParkingSpotController {
         if (parkingSpots.containsKey(parkingSpotId)) {
             parkingSpot.setId(parkingSpotId);
             parkingSpots.put(parkingSpot.getId(), parkingSpot);
+            ParkingSpotWriter.writeDataToCsv(new LinkedList<ParkingSpot>(parkingSpots.values()), "parking_data.csv");
             return ResponseEntity.ok(parkingSpot);
         } else {
             return ResponseEntity.notFound().build();
