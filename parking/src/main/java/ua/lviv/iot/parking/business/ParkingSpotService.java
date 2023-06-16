@@ -4,11 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.lviv.iot.parking.model.ParkingSpot;
 import ua.lviv.iot.parking.dataaccess.ParkingSpotRepository;
-import ua.lviv.iot.parking.reader.ParkingSpotReader;
-import ua.lviv.iot.parking.writer.ParkingSpotWriter;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
