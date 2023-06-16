@@ -7,25 +7,20 @@ import ua.lviv.iot.parking.dataaccess.ParkingSpotRepository;
 import ua.lviv.iot.parking.reader.ParkingSpotReader;
 import ua.lviv.iot.parking.writer.ParkingSpotWriter;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
 public class ParkingSpotService {
     private final ParkingSpotRepository parkingSpotRepository;
-    private final String csvFilePath = "parking_data.csv";
 
     @Autowired
     public ParkingSpotService(ParkingSpotRepository parkingSpotRepository) {
         this.parkingSpotRepository = parkingSpotRepository;
-        loadDataFromCsv();
+        this.parkingSpotRepository.loadDataFromCsv();
     }
 
-    private void loadDataFromCsv() {
-        List<ParkingSpot> parkingSpots = ParkingSpotReader.readDataFromCsv(csvFilePath);
-        for (ParkingSpot parkingSpot : parkingSpots) {
-            parkingSpotRepository.createParkingSpot(parkingSpot);
-        }
-    }
 
     public List<ParkingSpot> getParkingSpots() {
         return parkingSpotRepository.getParkingSpots();
@@ -36,26 +31,14 @@ public class ParkingSpotService {
     }
 
     public ParkingSpot createParkingSpot(ParkingSpot parkingSpot) {
-        ParkingSpot createdParkingSpot = parkingSpotRepository.createParkingSpot(parkingSpot);
-        saveDataToCsv();
-        return createdParkingSpot;
+        return parkingSpotRepository.createParkingSpot(parkingSpot);
     }
 
     public boolean deleteParkingSpot(Integer parkingSpotId) {
-        boolean isDeleted = parkingSpotRepository.deleteParkingSpot(parkingSpotId);
-        saveDataToCsv();
-        return isDeleted;
+        return parkingSpotRepository.deleteParkingSpot(parkingSpotId);
     }
 
     public ParkingSpot updateParkingSpot(Integer parkingSpotId, ParkingSpot updatedParkingSpot) {
-        ParkingSpot updatedSpot = parkingSpotRepository.updateParkingSpot(parkingSpotId, updatedParkingSpot);
-        saveDataToCsv();
-        return updatedSpot;
+        return parkingSpotRepository.updateParkingSpot(parkingSpotId, updatedParkingSpot);
     }
-
-    private void saveDataToCsv() {
-        List<ParkingSpot> parkingSpots = parkingSpotRepository.getParkingSpots();
-        ParkingSpotWriter.writeDataToCsv(parkingSpots, csvFilePath);
-    }
-
 }
