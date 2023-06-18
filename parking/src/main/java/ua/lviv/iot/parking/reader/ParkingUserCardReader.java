@@ -1,26 +1,25 @@
 package ua.lviv.iot.parking.reader;
 
-import ua.lviv.iot.parking.model.ParkingTicket;
+import ua.lviv.iot.parking.model.ParkingUserCard;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ParkingTicketReader {
+public class ParkingUserCardReader {
     private static final String CSV_SEPARATOR = ",";
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    public static List<ParkingTicket> readDataFromCsv(String csvFilePath) {
-        List<ParkingTicket> parkingTickets = new ArrayList<>();
+    public static List<ParkingUserCard> readDataFromCsv(String csvFilePath) {
+        List<ParkingUserCard> parkingUserCards = new ArrayList<>();
 
         var file = new File(csvFilePath);
         if(!file.exists()){
-            return parkingTickets;
+            return parkingUserCards;
         }
 
         try (BufferedReader reader = new BufferedReader(new FileReader(csvFilePath))) {
@@ -35,19 +34,19 @@ public class ParkingTicketReader {
 
                 var data = line.split(CSV_SEPARATOR);
 
-                var TicketNumber = Integer.parseInt(data[0]);
-                var carNumber = data[1];
-                var entryTime = LocalDateTime.parse(data[2], DATE_TIME_FORMATTER);
-                var exitTime = LocalDateTime.parse(data[3], DATE_TIME_FORMATTER);
+                var firstName = data[0];
+                var lastName = data[1];
+                var age = Integer.parseInt(data[2]);
+                var userCodeId = Integer.parseInt(data[3]);
 
-                var parkingTicket = new ParkingTicket(TicketNumber, carNumber, entryTime, exitTime);
-                parkingTickets.add(parkingTicket);
+                var parkingUserCard = new ParkingUserCard(firstName, lastName, age, userCodeId);
+                parkingUserCards.add(parkingUserCard);
             }
         } catch (IOException e) {
             System.err.println("Error occurred while reading data from the CSV file.");
             e.printStackTrace();
         }
 
-        return parkingTickets;
+        return parkingUserCards;
     }
 }
