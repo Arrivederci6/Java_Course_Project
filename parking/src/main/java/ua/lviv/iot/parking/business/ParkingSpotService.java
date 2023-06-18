@@ -17,7 +17,6 @@ public class ParkingSpotService {
         this.parkingSpotRepository.loadDataFromCsv();
     }
 
-
     public List<ParkingSpot> getParkingSpots() {
         return parkingSpotRepository.getParkingSpots();
     }
