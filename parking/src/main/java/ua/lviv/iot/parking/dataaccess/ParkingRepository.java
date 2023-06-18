@@ -35,7 +35,7 @@ public class ParkingRepository {
     }
 
     public boolean deleteParking(Integer parkingId) {
-        boolean removed = parkings.remove(parkingId) != null;
+        var removed = parkings.remove(parkingId) != null;
         if (removed) {
             saveDataToCsv();
         }
@@ -52,8 +52,8 @@ public class ParkingRepository {
         return null;
     }
     public void loadDataFromCsv() {
-        List<Parking> parkings = ParkingReader.readDataFromCsv(csvFilePath);
-        for (Parking parking : parkings) {
+        var parkings = ParkingReader.readDataFromCsv(csvFilePath);
+        for (var parking : parkings) {
             createParking(parking);
         }
     }

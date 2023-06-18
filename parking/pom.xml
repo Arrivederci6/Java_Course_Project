@@ -41,6 +41,7 @@
 			<artifactId>spring-restdocs-mockmvc</artifactId>
 			<scope>test</scope>
 		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -82,6 +83,19 @@
 					</excludes>
 				</configuration>
 			</plugin>
+<!--			<plugin>-->
+<!--				<groupId>com.github.spotbugs</groupId>-->
+<!--				<artifactId>spotbugs-maven-plugin</artifactId>-->
+<!--				<version>4.7.2.1</version>-->
+<!--				<dependencies>-->
+<!--					&lt;!&ndash; overwrite dependency on spotbugs if you want to specify the version of spotbugs &ndash;&gt;-->
+<!--					<dependency>-->
+<!--						<groupId>com.github.spotbugs</groupId>-->
+<!--						<artifactId>spotbugs</artifactId>-->
+<!--						<version>4.7.3</version>-->
+<!--					</dependency>-->
+<!--				</dependencies>-->
+<!--			</plugin>-->
 		</plugins>
 	</build>
 

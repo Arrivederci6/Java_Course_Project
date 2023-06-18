@@ -5,7 +5,6 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @Data
 public class Parking {
     private String address;

@@ -3,6 +3,7 @@ package ua.lviv.iot.parking.reader;
 import ua.lviv.iot.parking.model.ParkingSpot;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -17,9 +18,14 @@ public class ParkingSpotReader {
     public static List<ParkingSpot> readDataFromCsv(String csvFilePath) {
         List<ParkingSpot> parkingSpots = new ArrayList<>();
 
+        var file = new File(csvFilePath);
+        if(!file.exists()){
+            return parkingSpots;
+        }
+
         try (BufferedReader reader = new BufferedReader(new FileReader(csvFilePath))) {
             String line;
-            boolean isFirstLine = true;
+            var isFirstLine = true;
 
             while ((line = reader.readLine()) != null) {
                 if (isFirstLine) {
@@ -27,14 +33,14 @@ public class ParkingSpotReader {
                     continue;
                 }
 
-                String[] data = line.split(CSV_SEPARATOR);
+                var data = line.split(CSV_SEPARATOR);
 
-                int spotNumber = Integer.parseInt(data[0]);
-                String carNumber = data[1];
-                LocalDateTime entryTime = LocalDateTime.parse(data[2], DATE_TIME_FORMATTER);
-                LocalDateTime exitTime = LocalDateTime.parse(data[3], DATE_TIME_FORMATTER);
+                var spotNumber = Integer.parseInt(data[0]);
+                var carNumber = data[1];
+                var entryTime = LocalDateTime.parse(data[2], DATE_TIME_FORMATTER);
+                var exitTime = LocalDateTime.parse(data[3], DATE_TIME_FORMATTER);
 
-                ParkingSpot parkingSpot = new ParkingSpot(spotNumber, carNumber, entryTime, exitTime);
+                var parkingSpot = new ParkingSpot(spotNumber, carNumber, entryTime, exitTime);
                 parkingSpots.add(parkingSpot);
             }
         } catch (IOException e) {

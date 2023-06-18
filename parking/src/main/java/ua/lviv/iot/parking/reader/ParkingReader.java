@@ -3,6 +3,7 @@ package ua.lviv.iot.parking.reader;
 import ua.lviv.iot.parking.model.Parking;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
@@ -16,9 +17,14 @@ public class ParkingReader {
     public static List<Parking> readDataFromCsv(String csvFilePath) {
         List<Parking> parkings = new ArrayList<>();
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(csvFilePath))) {
+        var file = new File(csvFilePath);
+        if(!file.exists()){
+            return parkings;
+        }
+
+        try (var reader = new BufferedReader(new FileReader(csvFilePath))) {
             String line;
-            boolean isFirstLine = true;
+            var isFirstLine = true;
 
             while ((line = reader.readLine()) != null) {
                 if (isFirstLine) {
@@ -26,13 +32,13 @@ public class ParkingReader {
                     continue;
                 }
 
-                String[] data = line.split(CSV_SEPARATOR);
+                var data = line.split(CSV_SEPARATOR);
 
-                String address = data[0];
-                String marketNetwork = data[1];
-                int countOfParkingSpots = Integer.parseInt(data[2]);
+                var address = data[0];
+                var marketNetwork = data[1];
+                var countOfParkingSpots = Integer.parseInt(data[2]);
 
-                Parking parking = new Parking(address, marketNetwork, countOfParkingSpots);
+                var parking = new Parking(address, marketNetwork, countOfParkingSpots);
                 parkings.add(parking);
             }
         } catch (IOException e) {
