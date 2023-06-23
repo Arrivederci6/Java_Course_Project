@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-public class ParkingWriter {
+public class ParkingWriter extends Parking {
     private static final String CSV_HEADER = "Address,Market Network,Count of parking spots";
     private static final String CSV_SEPARATOR = ",";
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

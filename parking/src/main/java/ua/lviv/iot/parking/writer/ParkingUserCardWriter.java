@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-public class ParkingUserCardWriter {
+public class ParkingUserCardWriter extends ParkingUserCard {
     private static final String CSV_HEADER = "First name,Last name,Age,UserCard ID";
     private static final String CSV_SEPARATOR = ",";
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

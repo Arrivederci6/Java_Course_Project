@@ -2,8 +2,6 @@ package ua.lviv.iot.parking.model;
 
 import lombok.*;
 
-import java.time.LocalDateTime;
-
 @NoArgsConstructor
 @Data
 public class Parking {
@@ -19,3 +17,5 @@ public class Parking {
 
     }
 }
+
+
