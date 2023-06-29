@@ -6,14 +6,14 @@ import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
-public class ParkingSpot {
+public class ParkingTicket {
     private int spotNumber;
     private String carNumber;
     private Integer id;
     private LocalDateTime entryTime;
     private LocalDateTime exitTime;
 
-    public ParkingSpot(int spotNumber, String carNumber, LocalDateTime entryTime, LocalDateTime exitTime) {
+    public ParkingTicket(int spotNumber, String carNumber, LocalDateTime entryTime, LocalDateTime exitTime) {
         this.spotNumber = spotNumber;
         this.carNumber = carNumber;
         this.entryTime = entryTime;

@@ -1,63 +1,55 @@
 package ua.lviv.iot.parking.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ua.lviv.iot.parking.model.ParkingSpot;
+import ua.lviv.iot.parking.business.ParkingSpotService;
 
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @RequestMapping("/parkingSpots")
 @RestController
 public class ParkingSpotController {
-    private Map<Integer, ParkingSpot> parkingSpots = new HashMap<>();
-    private AtomicInteger idCounter = new AtomicInteger();
+    private final ParkingSpotService parkingSpotService;
+
+    @Autowired
+    public ParkingSpotController(ParkingSpotService parkingSpotService) {
+        this.parkingSpotService = parkingSpotService;
+    }
 
     @GetMapping
     public List<ParkingSpot> getParkingSpots() {
-        return new LinkedList<ParkingSpot>(parkingSpots.values());
+        return parkingSpotService.getParkingSpots();
     }
 
     @GetMapping(path = "/{id}")
-    public ParkingSpot getParkingSpot(final @PathVariable("id") Integer parkingSpotId) {
-        return parkingSpots.get(parkingSpotId);
-    }
-
-    @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ParkingSpot createParkingSpot(final @RequestBody ParkingSpot parkingSpot) {
-        parkingSpot.setId(idCounter.incrementAndGet());
-        parkingSpots.put(parkingSpot.getId(), parkingSpot);
-        return parkingSpot;
-//        String csvData = parkingSpot.getSpotNumber() + ", " + parkingSpot.getCarNumber() + ", " + parkingSpot.getId();
-//
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentType(MediaType.TEXT_PLAIN);
-//
-//        return csvData;
-    }
-
-    @DeleteMapping(path = "/{id}")
-    public ResponseEntity<ParkingSpot> deleteParkingSpot(@PathVariable("id") Integer parkingSpotId) {
-        HttpStatus status = parkingSpots.remove(parkingSpotId) == null ? HttpStatus.NOT_FOUND : HttpStatus.OK;
-        return ResponseEntity.status(status).build();
-    }
-
-    @PutMapping(path = "/{id}")
-    public ResponseEntity<ParkingSpot> updateParkingSpot(final @PathVariable("id") Integer parkingSpotId,
-                                                         final @RequestBody ParkingSpot parkingSpot) {
-
-        if (parkingSpots.containsKey(parkingSpotId)) {
-            parkingSpot.setId(parkingSpotId);
-            parkingSpots.put(parkingSpot.getId(), parkingSpot);
+    public ResponseEntity<ParkingSpot> getParkingSpot(@PathVariable("id") Integer parkingSpotId) {
+        ParkingSpot parkingSpot = parkingSpotService.getParkingSpot(parkingSpotId);
+        if (parkingSpot != null) {
             return ResponseEntity.ok(parkingSpot);
         } else {
             return ResponseEntity.notFound().build();
         }
     }
-}
 
+    @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ParkingSpot createParkingSpot(@RequestBody ParkingSpot parkingSpot) {
+        return parkingSpotService.createParkingSpot(parkingSpot);
+    }
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<Void> deleteParkingSpot(@PathVariable("id") Integer parkingSpotId) {
+        HttpStatus status = parkingSpotService.deleteParkingSpot(parkingSpotId) ? HttpStatus.OK : HttpStatus.NOT_FOUND;
+        return ResponseEntity.status(status).build();
+    }
+
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<ParkingSpot> updateParkingSpot(@PathVariable("id") Integer parkingSpotId,
+                                                         @RequestBody ParkingSpot parkingSpot) {
+        ParkingSpot updatedParkingSpot = parkingSpotService.updateParkingSpot(parkingSpotId, parkingSpot);
+        return updatedParkingSpot != null ? ResponseEntity.ok(updatedParkingSpot) : ResponseEntity.notFound().build();
+    }
+}
