@@ -26,8 +26,13 @@ public class ParkingController {
     }
 
     @GetMapping(path = "/{id}")
-    public Parking getParking(@PathVariable("id") Integer parkingId) {
-        return parkingService.getParking(parkingId);
+    public ResponseEntity<Parking> getParking(@PathVariable("id") Integer parkingId) {
+        Parking parking = parkingService.getParking(parkingId);
+        if (parking != null) {
+            return ResponseEntity.ok(parking);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE})

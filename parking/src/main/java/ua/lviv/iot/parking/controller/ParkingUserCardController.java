@@ -26,8 +26,13 @@ public class ParkingUserCardController {
     }
 
     @GetMapping(path = "/{id}")
-    public ParkingUserCard getParkingUserCard(@PathVariable("id") Integer parkingUserCardId) {
-        return parkingUserCardService.getParkingUserCard(parkingUserCardId);
+    public ResponseEntity<ParkingUserCard> getParkingUserCard(@PathVariable("id") Integer parkingUserCardId) {
+        ParkingUserCard parkingUserCard = parkingUserCardService.getParkingUserCard(parkingUserCardId);
+        if (parkingUserCard != null) {
+            return ResponseEntity.ok(parkingUserCard);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE})

@@ -26,8 +26,13 @@ public class ParkingTicketController {
     }
 
     @GetMapping(path = "/{id}")
-    public ParkingTicket getParkingTicket(@PathVariable("id") Integer parkingTicketId) {
-        return parkingTicketService.getParkingTicket(parkingTicketId);
+    public ResponseEntity<ParkingTicket> getParkingTicket(@PathVariable("id") Integer parkingTicketId) {
+        ParkingTicket parkingTicket = parkingTicketService.getParkingTicket(parkingTicketId);
+        if (parkingTicket != null) {
+            return ResponseEntity.ok(parkingTicket);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
