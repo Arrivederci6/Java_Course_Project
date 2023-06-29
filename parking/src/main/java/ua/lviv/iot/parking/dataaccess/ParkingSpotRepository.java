@@ -18,6 +18,8 @@ public class ParkingSpotRepository {
     private Map<Integer, ParkingSpot> parkingSpots = new HashMap<>();
     private AtomicInteger idCounter = new AtomicInteger();
     private final String csvFilePath = "parkingSpot-" + LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) + ".csv";
+    private ParkingSpotWriter parkingSpotWriter = new ParkingSpotWriter();
+    private ParkingSpotReader parkingSpotReader = new ParkingSpotReader();
 
 
     public List<ParkingSpot> getParkingSpots() {
@@ -53,14 +55,14 @@ public class ParkingSpotRepository {
         return null;
     }
     public void loadDataFromCsv() {
-        List<ParkingSpot> parkingSpots = ParkingSpotReader.readDataFromCsv(csvFilePath);
+        List<ParkingSpot> parkingSpots = parkingSpotReader.readDataFromCsv(csvFilePath);
         for (ParkingSpot parkingSpot : parkingSpots) {
             createParkingSpot(parkingSpot);
         }
     }
 
     private void saveDataToCsv() {
-        ParkingSpotWriter.writeDataToCsv(new LinkedList<>(parkingSpots.values()), csvFilePath);
+        parkingSpotWriter.writeDataToCsv(new LinkedList<>(parkingSpots.values()), csvFilePath);
     }
 
 }

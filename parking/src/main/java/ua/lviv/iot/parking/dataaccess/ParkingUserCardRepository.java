@@ -18,6 +18,9 @@ public class ParkingUserCardRepository {
     private Map<Integer, ParkingUserCard> parkingUserCards = new HashMap<>();
     private AtomicInteger idCounter = new AtomicInteger();
     private final String csvFilePath = "parkingUserCard-" + LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) + ".csv";
+    private ParkingUserCardWriter parkingUserCardWriter = new ParkingUserCardWriter();
+    private ParkingUserCardReader parkingUserCardReader = new ParkingUserCardReader();
+
 
 
     public List<ParkingUserCard> getParkingUserCards() {
@@ -53,13 +56,13 @@ public class ParkingUserCardRepository {
         return null;
     }
     public void loadDataFromCsv() {
-        List<ParkingUserCard> parkingUserCards = ParkingUserCardReader.readDataFromCsv(csvFilePath);
+        List<ParkingUserCard> parkingUserCards = parkingUserCardReader.readDataFromCsv(csvFilePath);
         for (ParkingUserCard parkingUserCard : parkingUserCards) {
             createParkingUserCard(parkingUserCard);
         }
     }
 
     private void saveDataToCsv() {
-        ParkingUserCardWriter.writeDataToCsv(new LinkedList<>(parkingUserCards.values()), csvFilePath);
+        parkingUserCardWriter.writeDataToCsv(new LinkedList<>(parkingUserCards.values()), csvFilePath);
     }
 }

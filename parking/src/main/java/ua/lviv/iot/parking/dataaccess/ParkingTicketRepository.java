@@ -4,6 +4,7 @@ import org.springframework.stereotype.Repository;
 import ua.lviv.iot.parking.model.ParkingTicket;
 import ua.lviv.iot.parking.reader.ParkingTicketReader;
 import ua.lviv.iot.parking.writer.ParkingTicketWriter;
+import ua.lviv.iot.parking.writer.ParkingWriter;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -18,6 +19,9 @@ public class ParkingTicketRepository {
     private Map<Integer, ParkingTicket> parkingTickets = new HashMap<>();
     private AtomicInteger idCounter = new AtomicInteger();
     private final String csvFilePath = "parkingTicket-" + LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) + ".csv";
+    private ParkingTicketWriter parkingTicketWriter = new ParkingTicketWriter();
+    private ParkingTicketReader parkingTicketReader = new ParkingTicketReader();
+
 
 
     public List<ParkingTicket> getParkingTickets() {
@@ -53,13 +57,13 @@ public class ParkingTicketRepository {
         return null;
     }
     public void loadDataFromCsv() {
-        List<ParkingTicket> parkingTickets = ParkingTicketReader.readDataFromCsv(csvFilePath);
+        List<ParkingTicket> parkingTickets = parkingTicketReader.readDataFromCsv(csvFilePath);
         for (ParkingTicket parkingTicket : parkingTickets) {
             createParkingTicket(parkingTicket);
         }
     }
 
     private void saveDataToCsv() {
-        ParkingTicketWriter.writeDataToCsv(new LinkedList<>(parkingTickets.values()), csvFilePath);
+        parkingTicketWriter.writeDataToCsv(new LinkedList<>(parkingTickets.values()), csvFilePath);
     }
 }
